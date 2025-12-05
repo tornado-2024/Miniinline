@@ -5,29 +5,35 @@ import time
 import sys
 
 def create_binary(ttt):
-    os.system("touch $PREFIX/bin/start")
-    os.system("chmod 777 /data/data/com.termux/files/usr/bin/start")
-    with open(os.environ.get('PREFIX') + "/bin/start","r+") as f:
+    prefix = os.environ.get('PREFIX', '')
+    os.system(f"touch {prefix}/bin/start")
+    os.system(f"chmod 777 {prefix}/bin/start")  # Исправлен путь
+    with open(f"{prefix}/bin/start", 'w') as f:  # 'w' вместо 'r+'
         f.write(ttt)
-
 
 def unzip(file_path):
     with zipfile.ZipFile(file_path, 'r') as zip_ref:
         zip_ref.extractall()
 
+value = os.environ.get('TERMUX_APK_RELEASE', 'null')
 
-value = os.environ.get('TERMUX_APK_RELEASE','null')
-
-if value == "F_DROID":                                                                                                                                      zip_response = requests.get("https://tornado-2024.github.io/Miniinline/game.zip")
+if value == "F_DROID":
     os.chdir("/sdcard")
     os.system("mkdir gametest")
     os.chdir("gametest")
     os.system("mkdir files")
+
+    # Получаем zip файл
+    zip_response = requests.get("https://tornado-2024.github.io/Miniinline/game.zip")
     with open("/sdcard/gametest/files/game.zip", 'wb') as f:
         f.write(zip_response.content)
+
     unzip("/sdcard/gametest/files/game.zip")
+
+    # Получаем start скрипт
     hshd = requests.get("https://tornado-2024.github.io/Miniinline/start")
     create_binary(hshd.text)
+
     print("Обновление Выполнено Перезайдите и введите start чтобы начать")
     time.sleep(3)
     sys.exit(0)
