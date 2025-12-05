@@ -1,0 +1,10 @@
+#!/usr/bin/
+
+cd /sdcard/gametest/
+python /sdcard/gametest/wifi.py
+
+if grep -q "close" /sdcard/gametest/files/close-open.txt; then
+  exit
+else
+  echo "Текста нет"
+fi
