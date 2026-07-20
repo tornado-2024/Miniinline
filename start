@@ -8,3 +8,5 @@ if grep -q "close" /sdcard/gametest/files/close-open.txt; then
 else
   echo "Текста нет"
 fi
+
+#jdjdjx
